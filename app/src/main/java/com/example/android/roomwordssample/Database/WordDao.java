@@ -1,4 +1,4 @@
-package com.example.android.roomwordssample;
+package com.example.android.roomwordssample.Database;
 
 /*
  * Copyright (C) 2017 Google Inc.
@@ -17,9 +17,12 @@ package com.example.android.roomwordssample;
  */
 
 import android.arch.lifecycle.LiveData;
+import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+
+import com.example.android.roomwordssample.Database.Word;
 
 import java.util.List;
 
@@ -40,7 +43,7 @@ public interface WordDao {
     // data has changed. Since we are getting all the contents of the database,
     // we are notified whenever any of the database contents have changed.
     @Query("SELECT * from word_table ORDER BY word ASC")
-    LiveData<List<Word>> getAlphabetizedWords();
+    public abstract DataSource.Factory<Integer,Word> getAllUsers();
 
     // We do not need a conflict strategy, because the word is our primary key, and you cannot
     // add two items with the same primary key to the database. If the table has more than one

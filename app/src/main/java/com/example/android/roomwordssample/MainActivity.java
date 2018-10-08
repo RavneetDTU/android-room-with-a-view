@@ -18,6 +18,7 @@ package com.example.android.roomwordssample;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.arch.paging.PagedList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,7 +30,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.List;
+import com.example.android.roomwordssample.Database.Word;
+import com.example.android.roomwordssample.Paging.WordListAdapter;
+import com.example.android.roomwordssample.ViewModel.WordViewModel;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        final WordListAdapter adapter = new WordListAdapter(this);
+        final WordListAdapter adapter = new WordListAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -57,11 +60,11 @@ public class MainActivity extends AppCompatActivity {
         // Add an observer on the LiveData returned by getAlphabetizedWords.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        mWordViewModel.getAllWords().observe(this, new Observer<List<Word>>() {
+        mWordViewModel.getAllWords().observe(this, new Observer<PagedList<Word>>() {
             @Override
-            public void onChanged(@Nullable final List<Word> words) {
+            public void onChanged(@Nullable final PagedList<Word> words) {
                 // Update the cached copy of the words in the adapter.
-                adapter.setWords(words);
+                adapter.submitList(words);
             }
         });
 

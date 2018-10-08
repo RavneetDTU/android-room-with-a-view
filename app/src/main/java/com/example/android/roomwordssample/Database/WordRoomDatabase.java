@@ -1,4 +1,4 @@
-package com.example.android.roomwordssample;
+package com.example.android.roomwordssample.Database;
 
 /*
  * Copyright (C) 2017 Google Inc.
@@ -37,7 +37,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
     // marking the instance as volatile to ensure atomic access to the variable
     private static volatile WordRoomDatabase INSTANCE;
 
-    static WordRoomDatabase getDatabase(final Context context) {
+    public static WordRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (WordRoomDatabase.class) {
                 if (INSTANCE == null) {

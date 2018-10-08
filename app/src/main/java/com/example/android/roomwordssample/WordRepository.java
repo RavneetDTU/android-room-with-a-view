@@ -18,7 +18,13 @@ package com.example.android.roomwordssample;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 import android.os.AsyncTask;
+
+import com.example.android.roomwordssample.Database.Word;
+import com.example.android.roomwordssample.Database.WordDao;
+import com.example.android.roomwordssample.Database.WordRoomDatabase;
 
 import java.util.List;
 
@@ -27,31 +33,38 @@ import java.util.List;
  * https://developer.android.com/topic/libraries/architecture/guide.html
  */
 
-class WordRepository {
+public class WordRepository {
 
     private WordDao mWordDao;
-    private LiveData<List<Word>> mAllWords;
+    private LiveData<PagedList<Word>> mAllWords;
 
     // Note that in order to unit test the WordRepository, you have to remove the Application
     // dependency. This adds complexity and much more code, and this sample is not about testing.
     // See the BasicSample in the android-architecture-components repository at
     // https://github.com/googlesamples
-    WordRepository(Application application) {
+    public WordRepository(Application application) {
         WordRoomDatabase db = WordRoomDatabase.getDatabase(application);
         mWordDao = db.wordDao();
-        mAllWords = mWordDao.getAlphabetizedWords();
+
+        PagedList.Config config = (new PagedList.Config.Builder())
+                .setPageSize(20)
+                .setEnablePlaceholders(false)
+                .setPrefetchDistance(10)
+                .build();
+
+        mAllWords = (new LivePagedListBuilder(mWordDao.getAllUsers(),config)).build();
     }
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    LiveData<List<Word>> getAllWords() {
+    public LiveData<PagedList<Word>> getAllWords() {
         return mAllWords;
     }
 
     // You must call this on a non-UI thread or your app will crash.
     // Like this, Room ensures that you're not doing any long running operations on the main
     // thread, blocking the UI.
-    void insert(Word word) {
+    public void insert(Word word) {
         new insertAsyncTask(mWordDao).execute(word);
     }
 

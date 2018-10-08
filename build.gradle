@@ -28,5 +28,6 @@ task clean(type: Delete) {
 
 ext {
     roomVersion = '1.1.1'
+    paging_version = "1.0.0"
     archLifecycleVersion = '1.1.1'
 }

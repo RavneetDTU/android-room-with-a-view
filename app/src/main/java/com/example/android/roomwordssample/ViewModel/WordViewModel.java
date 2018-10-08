@@ -1,4 +1,4 @@
-package com.example.android.roomwordssample;
+package com.example.android.roomwordssample.ViewModel;
 
 /*
  * Copyright (C) 2017 Google Inc.
@@ -19,6 +19,10 @@ package com.example.android.roomwordssample;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.paging.PagedList;
+
+import com.example.android.roomwordssample.Database.Word;
+import com.example.android.roomwordssample.WordRepository;
 
 import java.util.List;
 
@@ -34,7 +38,7 @@ public class WordViewModel extends AndroidViewModel {
     // - We can put an observer on the data (instead of polling for changes) and only update the
     //   the UI when the data actually changes.
     // - Repository is completely separated from the UI through the ViewModel.
-    private LiveData<List<Word>> mAllWords;
+    private LiveData<PagedList<Word>> mAllWords;
 
     public WordViewModel(Application application) {
         super(application);
@@ -42,11 +46,11 @@ public class WordViewModel extends AndroidViewModel {
         mAllWords = mRepository.getAllWords();
     }
 
-    LiveData<List<Word>> getAllWords() {
+    public LiveData<PagedList<Word>> getAllWords() {
         return mAllWords;
     }
 
-    void insert(Word word) {
+    public void insert(Word word) {
         mRepository.insert(word);
     }
 }
